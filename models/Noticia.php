@@ -49,4 +49,17 @@ class Noticia extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'title' => 'titulo',
+            'status' => function (Noticia $model) {
+                return ($model->status == '1' ? 'Ativo' : 'Inativo');
+            },
+            'cabeca',
+            'corpo'
+        ];
+    }
 }
