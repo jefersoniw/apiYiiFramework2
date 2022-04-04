@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use RestClient;
+use yii\helpers\Json;
 
 class SiteController extends Controller
 {
@@ -128,6 +130,43 @@ class SiteController extends Controller
 
     public function actionFeed()
     {
-        return $this->render('feed');
+        $api = new RestClient([
+            'base_url' => 'http://localhost:9999/api',
+            'headers' => [
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        // $result = $api->get('/default/2');
+
+        //INSERINDO
+        /*$result = $api->post('/default/create', [
+            'titulo' => 'Criando noticia as 17horas',
+            'cabeca' => 'titulo novo',
+            'corpo' => 'corpo da noticia pela aplicacao',
+            'status' => '1',
+        ]);*/
+
+        //ATUALIZANDO
+        $result = $api->put('/default/7', [
+            'titulo' => 'Criando noticia as 17horas ALTERADO',
+            'cabeca' => 'titulo novo',
+            'corpo' => 'corpo da noticia pela aplicacao',
+            'status' => '1',
+        ]);
+
+        $result = $api->get('/default');
+        $data = Json::decode($result->response);
+
+
+
+        //print de teste na tela
+        /*echo '<pre>';
+        print_r($data);
+        die;*/
+
+        return $this->render('feed', [
+            'data' => $data
+        ]);
     }
 }
